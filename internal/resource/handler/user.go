@@ -6,17 +6,25 @@ import (
 	"rest-api/internal/resource/model"
 	"rest-api/internal/resource/repository"
 	"rest-api/utils"
-	errorResponse "rest-api/utils/errors"
+	e "rest-api/utils/errors"
 	"rest-api/utils/validator"
 )
 
-type API struct {
+type UserHandler struct {
 	userRepository *repository.UserRepository
 	validator      *validator.Validator
-	errorResponse  *errorResponse.ErrorResponse
+	errorResponse  *e.ErrorResponse
 }
 
-func (a *API) activateUserHandler(w http.ResponseWriter, r *http.Request) {
+func NewUserHandler(userRepository *repository.UserRepository, v *validator.Validator, errResp *e.ErrorResponse) *UserHandler {
+	return &UserHandler{
+		userRepository: userRepository,
+		validator:      v,
+		errorResponse:  errResp,
+	}
+}
+
+func (a *UserHandler) ActivateUserHandler(w http.ResponseWriter, r *http.Request) {
 	var input struct {
 		Cod   int    `json:"cod"`
 		Email string `json:"email"`
@@ -61,7 +69,7 @@ func (a *API) activateUserHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func (a *API) registerUserHandler(w http.ResponseWriter, r *http.Request) {
+func (a *UserHandler) RegisterUserHandler(w http.ResponseWriter, r *http.Request) {
 	var userDTO model.UserSaveDTO
 	err := utils.ReadJSON(w, r, &userDTO)
 	if err != nil {
