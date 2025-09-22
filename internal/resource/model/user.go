@@ -2,7 +2,7 @@ package model
 
 import (
 	"errors"
-	"rest-api/internal/validator"
+	"rest-api/utils/validator"
 	"time"
 
 	"github.com/google/uuid"
